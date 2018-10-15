@@ -77,6 +77,7 @@
 
             <template v-if="prop.type === 'file'">
               <v-text-field
+                :ref="'fileTextField' + index"
                 :label="prop.title"
                 :hint="prop.description"
                 persistent-hint
@@ -88,8 +89,8 @@
               ></v-text-field>
               <input
                 type="file"
-                accept="*"
-                :multiple="false"
+                :accept="prop.accept"
+                :multiple="prop.multiple"
                 :disabled="false"
                 :ref="'fileInput' + index"
                 @change="uploadFile(index, $event)"
@@ -236,10 +237,12 @@ export default {
           title: 'Поле 7',
           description: 'Описание',
           type: 'file',
-          value: [],
+          value: null,
           required: true,
           rules: [v => !!v || 'Заполните поле'],
           files: [],
+          multiple: true,
+          accept: '*',
         },
       ],
     };
@@ -251,12 +254,13 @@ export default {
     uploadFile: function uploadFile(index, e) {
       const files = e.target.files || e.dataTransfer.files;
       console.log(files);
-      if (!files.length) {
-        this.formProps[index].value = [];
-      } else {
-        for (let i = 0; files[i]; i += 1) {
-          this.formProps[index].value.push(files[i].name);
-        }
+      this.formProps[index].value = [];
+      this.formProps[index].files = [];
+
+      this.formProps[index].value = [...files].map(file => file.name).join(', ');
+
+      for (let i = 0; files[i]; i += 1) {
+        this.formProps[index].files.push(files[i]);
       }
     },
     onFocus: function onFocus(refInput) {
