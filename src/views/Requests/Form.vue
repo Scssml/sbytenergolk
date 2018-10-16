@@ -76,25 +76,17 @@
             </template>
 
             <template v-if="prop.type === 'file'">
-              <v-text-field
-                :ref="'fileTextField' + index"
+              <input-type-file
                 :label="prop.title"
                 :hint="prop.description"
-                persistent-hint
                 :required="prop.required"
                 :rules="prop.rules"
-                :value="prop.value"
-                readonly
-                @click.native="onFocus('fileInput' + index)"
-              ></v-text-field>
-              <input
-                type="file"
                 :accept="prop.accept"
                 :multiple="prop.multiple"
                 :disabled="false"
-                :ref="'fileInput' + index"
-                @change="uploadFile(index, $event)"
+                v-model="prop.value"
               >
+              </input-type-file>
             </template>
           </v-flex>
         </template>
@@ -119,8 +111,13 @@
 </template>
 
 <script>
+import InputTypeFile from '../../components/InputTypeFile.vue';
+
 export default {
   name: 'Form',
+  components: {
+    'input-type-file': InputTypeFile,
+  },
   data() {
     return {
       nameForm: 'Заявка на ТП',
@@ -240,7 +237,6 @@ export default {
           value: null,
           required: true,
           rules: [v => !!v || 'Заполните поле'],
-          files: [],
           multiple: true,
           accept: '*',
         },
