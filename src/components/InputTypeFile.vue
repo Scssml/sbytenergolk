@@ -16,7 +16,7 @@
       :multiple="multiple"
       :disabled="disabled"
       ref="fileInput"
-      class="hidden-lg-and-down"
+      class="hidden"
       @change="uploadFile($event)"
     >
   </div>
@@ -85,3 +85,7 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+  .hidden { display: none; }
+</style>
