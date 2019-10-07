@@ -65,7 +65,7 @@ export default {
   methods: {
     uploadFile: function uploadFile(e) {
       const files = e.target.files || e.dataTransfer.files;
-      console.log(files);
+
       this.value = '';
       this.files = [];
 
@@ -86,6 +86,6 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
   .hidden { display: none; }
 </style>

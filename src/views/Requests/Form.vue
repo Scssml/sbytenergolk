@@ -15,7 +15,7 @@
                 persistent-hint
                 :required="prop.required"
                 :rules="prop.rules"
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
               ></v-text-field>
             </template>
 
@@ -28,7 +28,7 @@
                 :multiple="prop.multiple"
                 :required="prop.required"
                 :rules="prop.rules"
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
               ></v-select>
             </template>
 
@@ -40,13 +40,13 @@
                 auto-grow
                 :required="prop.required"
                 :rules="prop.rules"
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
               ></v-textarea>
             </template>
 
             <template v-if="prop.type === 'radio'">
               <v-radio-group
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
                 :hint="prop.description"
                 persistent-hint
               >
@@ -71,7 +71,7 @@
                 persistent-hint
                 ripple
                 color="primary"
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
               ></v-checkbox>
             </template>
 
@@ -84,7 +84,7 @@
                 :accept="prop.accept"
                 :multiple="prop.multiple"
                 :disabled="false"
-                v-model="prop.value"
+                v-model="propsItem[prop.id]"
               >
               </input-type-file>
             </template>
@@ -98,6 +98,7 @@
         color="primary"
         ripple
         @click="submitForm"
+        :loading="loadingBtn"
       >
         Отправить
       </v-btn>
@@ -107,6 +108,20 @@
         ripple
       >Отмена</v-btn>
     </v-form>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="3000"
+      top
+      :color="(error) ? 'red' : 'primary'"
+    >
+      <v-flex
+        class="text-xs-center"
+        xs12
+      >
+        {{ message }}
+      </v-flex>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -120,136 +135,112 @@ export default {
   },
   data() {
     return {
+      loadingBtn: false,
+      snackbar: false,
+      error: false,
+      message: '',
       nameForm: 'Заявка на ТП',
+      propsItem: {
+        UF_TEST_1: '',
+        UF_TEST_2: '',
+        UF_TEST_3: '',
+        UF_TEST_4: null,
+        UF_TEST_5: null,
+        UF_TYPE: 29,
+      },
       formProps: [
         {
           title: 'Поле 1',
-          description: 'Описание',
+          description: '',
           type: 'text',
-          value: null,
           required: true,
           rules: [v => !!v || 'Заполните поле'],
+          id: 'UF_TEST_1',
         },
         {
           title: 'Поле 2',
-          description: 'Описание',
-          type: 'select',
-          items: [
-            'Значение 1',
-            'Значение 2',
-            'Значение 3',
-            'Значение 4',
-            'Значение 5',
-          ],
-          value: null,
+          description: '',
+          type: 'text',
           required: true,
           rules: [v => !!v || 'Заполните поле'],
-          multiple: false,
+          id: 'UF_TEST_2',
         },
         {
           title: 'Поле 3',
-          description: 'Описание',
-          type: 'select',
-          items: [
-            'Значение 1',
-            'Значение 2',
-            'Значение 3',
-            'Значение 4',
-            'Значение 5',
-          ],
-          value: [],
-          required: true,
-          rules: [v => !!v.length || 'Заполните поле'],
-          multiple: true,
+          description: '',
+          type: 'text',
+          required: false,
+          // rules: [v => !!v || 'Заполните поле'],
+          id: 'UF_TEST_3',
         },
         {
           title: 'Поле 4',
-          description: 'Описание',
-          type: 'textarea',
-          value: [],
-          required: true,
-          rules: [v => !!v.length || 'Заполните поле'],
-        },
-        {
-          title: 'Поле 5',
-          description: 'Описание',
-          type: 'radio',
-          items: [
-            {
-              label: 'Значение 1',
-              value: 1,
-            },
-            {
-              label: 'Значение 2',
-              value: 2,
-            },
-            {
-              label: 'Значение 3',
-              value: 3,
-            },
-            {
-              label: 'Значение 4',
-              value: 4,
-            },
-          ],
-          value: null,
-          required: true,
-          rules: [v => !!v.length || 'Заполните поле'],
-        },
-        {
-          title: 'Поле 6',
-          type: 'checkbox',
-          items: [
-            {
-              label: 'Значение 1',
-              value: 1,
-              description: 'Описание',
-            },
-            {
-              label: 'Значение 2',
-              value: 2,
-              description: '',
-            },
-            {
-              label: 'Значение 3',
-              value: 3,
-              description: '',
-            },
-          ],
-          value: [],
-        },
-        {
-          title: 'Поле 7',
-          type: 'checkbox',
-          items: [
-            {
-              label: 'Значение 1',
-              value: 1,
-              description: 'Описание',
-            },
-          ],
-          value: [],
-        },
-        {
-          title: 'Поле 7',
-          description: 'Описание',
+          description: '',
           type: 'file',
-          value: null,
           required: true,
           rules: [v => !!v || 'Заполните поле'],
           multiple: true,
           accept: '*',
+          id: 'UF_TEST_4',
+        },
+        {
+          title: 'Поле 5',
+          description: '',
+          type: 'file',
+          required: false,
+          // rules: [v => !!v || 'Заполните поле'],
+          multiple: true,
+          accept: '*',
+          id: 'UF_TEST_5',
         },
       ],
     };
   },
   methods: {
     submitForm: function submitForm() {
-      this.$refs.form.validate();
+      const validate = this.$refs.form.validate();
+
+      if (validate) {
+        const formData = new FormData();
+        this.loadingBtn = true;
+        this.snackbar = false;
+        this.error = false;
+        this.message = '';
+
+        Object.keys(this.propsItem).forEach((key) => {
+          if (Array.isArray(this.propsItem[key])) {
+            this.propsItem[key].forEach((item) => {
+              formData.append(`PROPS[${key}]`, item);
+            });
+          } else {
+            formData.append(`PROPS[${key}]`, this.propsItem[key]);
+          }
+        });
+
+        const itemParams = {
+          type: 'statement/add.php',
+          props: formData,
+        };
+
+        this.$store.dispatch('addItem', itemParams).then(() => {
+          this.snackbar = true;
+          this.message = 'Сохранено';
+
+          setTimeout(() => {
+            this.$router.push('/requests/');
+          }, 1500);
+          this.loadingBtn = true;
+        }).catch(() => {
+          this.snackbar = true;
+          this.error = true;
+          this.loadingBtn = false;
+          this.message = 'Ошибка';
+        });
+      }
     },
     uploadFile: function uploadFile(index, e) {
       const files = e.target.files || e.dataTransfer.files;
-      console.log(files);
+
       this.formProps[index].value = [];
       this.formProps[index].files = [];
 

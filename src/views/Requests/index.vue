@@ -38,17 +38,17 @@
             class="my-4"
           >
             <v-card-title class="light-blue lighten-2 white--text">
-              <div>Заявка №{{ item.id }}</div>
+              <div>Заявка №{{ item.ID }}</div>
               <v-spacer></v-spacer>
-              <div>{{ item.date }}</div>
+              <div>{{ item.UF_DATA }}</div>
             </v-card-title>
             <v-list two-line>
               <v-list-tile
                 avatar
               >
                 <v-list-tile-content>
-                  <v-list-tile-title class="mb-2">{{ item.title }}</v-list-tile-title>
-                  <v-list-tile-sub-title>Статус: {{ item.status }}</v-list-tile-sub-title>
+                  <v-list-tile-title class="mb-2">{{ item.UF_TYPE }}</v-list-tile-title>
+                  <v-list-tile-sub-title>Статус: {{ item.UF_STATUS }}</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -97,81 +97,25 @@ export default {
           link: '/requests/form/5',
         },
       ],
-      requestList: [
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-        {
-          title: 'Подача заявки на ТП',
-          status: 'Принята',
-          date: '04.08.2018',
-          id: 5,
-        },
-      ],
+      requestList: [],
     };
+  },
+  methods: {
+    getRequest() {
+      const props = {
+        type: 'statement/getList.php',
+        offset: 0,
+      };
+
+      this.$store.dispatch('getListItems', props).then((response) => {
+        this.requestList = response;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+  },
+  mounted() {
+    this.getRequest();
   },
 };
 </script>
