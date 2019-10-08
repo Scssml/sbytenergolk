@@ -61,6 +61,7 @@
         >
           <v-card
             class="my-4"
+            :to="'/requests/edit/' + item.ID"
           >
             <v-card-title class="light-blue lighten-2 white--text">
               <div>Заявка №{{ item.ID }}</div>

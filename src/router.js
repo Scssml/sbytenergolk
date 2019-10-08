@@ -25,5 +25,10 @@ export default new Router({
       name: 'requests-form',
       component: () => import('./views/Requests/Form.vue'),
     },
+    {
+      path: '/requests/edit/:id',
+      name: 'requests-edit',
+      component: () => import('./views/Requests/Edit.vue'),
+    },
   ],
 });
